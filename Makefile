@@ -1,7 +1,9 @@
-.PHONY: test build clean
+.PHONY: all test build clean
 
 CC = gcc
-CFLAGS = -O2 -pedantic -Wall -pipe
+CFLAGS = -std=c17 -O2 -pedantic -Wall -pipe
+
+all: build test
 
 build: build/xor.s
 

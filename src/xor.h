@@ -18,6 +18,7 @@ xor_list* xd_create_empty_list();
 void xd_destroy_list(xor_list *list);
 
 int xd_is_empty(xor_list *list);
+
 size_t xd_length(xor_list *list);
 
 int xd_add_front(xor_list *list, int value);
@@ -27,4 +28,11 @@ int xd_pop_front(xor_list *list, int *value);
 int xd_pop_back(xor_list *list, int *value);
 
 int xd_get_index(xor_list *list, size_t index, int *value);
-int xd_to_array(xor_list *list, int **array);
+
+int* xd_to_array(xor_list *list);
+
+// TODO: implement these
+
+xor_list* xd_deep_copy(xor_list *list);
+
+xor_list* xd_concat(xor_list *list1, xor_list *list2);

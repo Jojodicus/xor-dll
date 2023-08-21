@@ -12,8 +12,8 @@
     if (current) { \
         while (drag != list->last) { \
             xor_element *next = XOR(current->neighbours, drag); \
-            current_expression; \
             drag = current; \
+            current_expression; \
             current = next; \
         } \
     }
@@ -28,7 +28,6 @@ void xd_destroy_list(xor_list *list) {
         return;
     }
 
-    // yes, this uses dangling pointers
     LIST_ITERATION(list, free(current))
     free(list);
 }
@@ -96,11 +95,31 @@ int xd_add_back(xor_list *list, int value) { // TODO: DRY with add_front
 }
 
 int xd_pop_front(xor_list *list, int *value) {
-    return 0; // TODO
+    if (!list || !list->first) {
+        return -1;
+    }
+
+    xor_element *popping = list->first;
+    list->first = popping->neighbours;
+    list->first->neighbours = XOR(list->first->neighbours, popping);
+
+    *value = popping->data;
+    free(popping);
+    return 0;
 }
 
 int xd_pop_back(xor_list *list, int *value) {
-    return 0; // TODO
+    if (!list || !list->last) {
+        return -1;
+    }
+
+    xor_element *popping = list->last;
+    list->last = popping->neighbours;
+    list->last->neighbours = XOR(list->last->neighbours, popping);
+
+    *value = popping->data;
+    free(popping);
+    return 0;
 }
 
 int xd_get_index(xor_list *list, size_t index, int *value) {
@@ -112,7 +131,7 @@ int xd_get_index(xor_list *list, size_t index, int *value) {
     LIST_ITERATION(list,
         if(!index--) {
             *value = current->data;
-            return;
+            return 0;
         }
     )
 
@@ -120,21 +139,21 @@ int xd_get_index(xor_list *list, size_t index, int *value) {
     return -1;
 }
 
-int xd_to_array(xor_list *list, int **array) {
+int* xd_to_array(xor_list *list) {
     if (!list) {
-        return -1;
+        return NULL;
     }
 
     // create array
     size_t length = xd_length(list);
-    *array = calloc(length, sizeof(int));
+    int *array = calloc(length, sizeof(int));
     if (!*array) {
-        return -1;
+        return NULL;
     }
 
     // fill array
     size_t running_index = 0;
-    LIST_ITERATION(list, *array[running_index++] = current->data);
+    LIST_ITERATION(list, array[running_index++] = current->data);
 
-    return 0;
+    return array;
 }
