@@ -26,5 +26,5 @@ int xd_add_back(xor_list *list, int value);
 int xd_pop_front(xor_list *list, int *value);
 int xd_pop_back(xor_list *list, int *value);
 
-int xd_get_index(xor_list *list, int *value);
+int xd_get_index(xor_list *list, size_t index, int *value);
 int xd_to_array(xor_list *list, int **array);
