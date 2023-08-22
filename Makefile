@@ -1,7 +1,7 @@
 .PHONY: all test build clean
 
 CC = gcc
-CFLAGS = -std=c17 -O2 -pedantic -Wall -pipe
+CFLAGS = -std=c17 -O2 -pedantic -Wall -pipe -g
 
 all: build test
 

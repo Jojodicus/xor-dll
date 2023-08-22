@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define XOR(a, b) (xor_element*)((uintptr_t)a ^ (uintptr_t)b)
+#define XOR(a, b) (xor_element*)((uintptr_t)(a) ^ (uintptr_t)(b))
 
 // template for iterating over the list
 #define LIST_ITERATION(list, current_expression) \
@@ -28,12 +28,22 @@ void xd_destroy_list(xor_list *list) {
         return;
     }
 
-    LIST_ITERATION(list, free(current))
+    LIST_ITERATION(list, free(current));
     free(list);
 }
 
+void xd_clear(xor_list *list) {
+    if (!list) {
+        return;
+    }
+
+    LIST_ITERATION(list, free(current));
+    list->first = NULL;
+    list->last = NULL;
+}
+
 int xd_is_empty(xor_list *list) {
-    return list && list->first;
+    return !(list && list->first);
 }
 
 size_t xd_length(xor_list *list) {
@@ -81,7 +91,7 @@ int xd_add_back(xor_list *list, int value) { // TODO: DRY with add_front
     new_element->neighbours = list->last;
     new_element->data = value;
 
-    if (!list->first) {
+    if (!list->last) {
         // empty list
         list->first = new_element;
         list->last = new_element;
@@ -95,35 +105,55 @@ int xd_add_back(xor_list *list, int value) { // TODO: DRY with add_front
 }
 
 int xd_pop_front(xor_list *list, int *value) {
-    if (!list || !list->first) {
+    // no/empty list
+    if (xd_is_empty(list)) {
         return -1;
     }
 
+    // adjust first element
     xor_element *popping = list->first;
     list->first = popping->neighbours;
-    list->first->neighbours = XOR(list->first->neighbours, popping);
 
-    *value = popping->data;
+    // adjust neighbour (or last pointer if no element left)
+    if (list->first) {
+        list->first->neighbours = XOR(list->first->neighbours, popping);
+    } else {
+        list->last = NULL;
+    }
+
+    if (value) {
+        *value = popping->data;
+    }
     free(popping);
     return 0;
 }
 
 int xd_pop_back(xor_list *list, int *value) {
-    if (!list || !list->last) {
+    // no/empty list
+    if (xd_is_empty(list)) {
         return -1;
     }
 
+    // adjust last pointer
     xor_element *popping = list->last;
     list->last = popping->neighbours;
-    list->last->neighbours = XOR(list->last->neighbours, popping);
 
-    *value = popping->data;
+    // adjust neighbour (or first pointer if no element left)
+    if (list->last) {
+        list->last->neighbours = XOR(list->last->neighbours, popping);
+    } else {
+        list->first = NULL;
+    }
+
+    if (value) {
+        *value = popping->data;
+    }
     free(popping);
     return 0;
 }
 
 int xd_get_index(xor_list *list, size_t index, int *value) {
-    if (!list) {
+    if (xd_is_empty(list)) {
         return -1;
     }
 
@@ -133,7 +163,7 @@ int xd_get_index(xor_list *list, size_t index, int *value) {
             *value = current->data;
             return 0;
         }
-    )
+    );
 
     // index too large
     return -1;
@@ -147,7 +177,7 @@ int* xd_to_array(xor_list *list) {
     // create array
     size_t length = xd_length(list);
     int *array = calloc(length, sizeof(int));
-    if (!*array) {
+    if (!array) {
         return NULL;
     }
 

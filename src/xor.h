@@ -17,6 +17,8 @@ typedef struct xor_list {
 xor_list* xd_create_empty_list();
 void xd_destroy_list(xor_list *list);
 
+void xd_clear(xor_list *list);
+
 int xd_is_empty(xor_list *list);
 
 size_t xd_length(xor_list *list);
@@ -32,6 +34,7 @@ int xd_get_index(xor_list *list, size_t index, int *value);
 int* xd_to_array(xor_list *list);
 
 // TODO: implement these
+
 
 xor_list* xd_deep_copy(xor_list *list);
 

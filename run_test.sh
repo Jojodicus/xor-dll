@@ -17,4 +17,4 @@ then
     make test
 fi
 
-valgrind -s ./build/test
+valgrind -s --leak-check=full ./build/test
