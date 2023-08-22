@@ -1,4 +1,4 @@
-![build status](https://github.com/Jojodicus/xor-dll/blob/main/.github/workflows/build.yml/badge.svg)
+![build status](https://github.com/jojodicus/xor-dll/actions/workflows/build.yml/badge.svg)
 
 # xor-dll
 Space-optimized doubly-linked-list using xor-ed pointers.
