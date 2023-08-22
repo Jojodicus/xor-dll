@@ -15,6 +15,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: valgrind
       run: |
-        apt install valgrind -y
+        sudo apt install -y valgrind
         make test
         valgrind --leak-check=full --error-exitcode=1 ./build/test
