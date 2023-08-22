@@ -35,7 +35,6 @@ int* xd_to_array(xor_list *list);
 
 // TODO: implement these
 
-
 xor_list* xd_deep_copy(xor_list *list);
 
 xor_list* xd_concat(xor_list *list1, xor_list *list2);

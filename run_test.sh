@@ -16,6 +16,7 @@ check_command gcc
 
 if ! [ -e build/test ]
 then
+    make clean
     make test
 fi
 
