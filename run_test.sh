@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# helper script for running tests outside of CI/CD
+
 check_command () {
     if ! which $1 > /dev/null 2>&1
     then
@@ -17,4 +19,4 @@ then
     make test
 fi
 
-valgrind -s --leak-check=full ./build/test
+valgrind --leak-check=full ./build/test
