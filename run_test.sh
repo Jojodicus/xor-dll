@@ -14,10 +14,5 @@ check_command valgrind
 check_command make
 check_command gcc
 
-if ! [ -e build/test ]
-then
-    make clean
-    make test
-fi
-
+make test
 valgrind --leak-check=full ./build/test

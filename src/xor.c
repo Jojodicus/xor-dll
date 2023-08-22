@@ -57,6 +57,10 @@ size_t xd_length(xor_list *list) {
 }
 
 int xd_add_front(xor_list *list, int value) {
+    if (!list) {
+        return -1;
+    }
+
     // reserve space
     xor_element *new_element = malloc(sizeof(xor_element));
     if (!new_element) {
@@ -81,6 +85,10 @@ int xd_add_front(xor_list *list, int value) {
 }
 
 int xd_add_back(xor_list *list, int value) { // TODO: DRY with add_front
+    if (!list) {
+        return -1;
+    }
+
     // reserve space
     xor_element *new_element = malloc(sizeof(xor_element));
     if (!new_element) {
@@ -153,7 +161,7 @@ int xd_pop_back(xor_list *list, int *value) {
 }
 
 int xd_get_index(xor_list *list, size_t index, int *value) {
-    if (xd_is_empty(list)) {
+    if (xd_is_empty(list) || !value) {
         return -1;
     }
 
