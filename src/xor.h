@@ -130,13 +130,34 @@ int xd_get_index(xor_list *list, size_t index, int *value);
  *
  * Allocates space for an array and copies every value in \p list into it.
  * The returned array is malloc'ed, so it has to be freed by the user.
- * Length of the array is the length provided by \ref xd_length().
+ * Length of the array is the length provided by \ref xd_length(). O(n) runtime.
  *
  * \param list List to convert.
  * \return allocated array of values, has to be passed to \ref free().
 */
 int* xd_to_array(xor_list *list);
 
-// TODO: implement these
+/**
+ * \brief Create a deep copy of a list.
+ *
+ * Allocates space for a new list and copies every element to said list.
+ * The returned list has to be passed to \ref xd_destroy_list(). O(n) runtime.
+ *
+ * \param list The list to copy.
+ * \return Deep copy of \p list or NULL on failure.
+*/
 xor_list* xd_deep_copy(xor_list *list);
+
+/**
+ * \brief Concatenate two lists.
+ *
+ * Allocates space for a list and adds both the data from \p list1 and \p list2.
+ * The returned list has to be passed to \ref xd_destroy_list().
+ * If either list is NULL, a deep copy of the non-NULL list is created.
+ * O(n+m) runtime.
+ *
+ * \param list1 First list.
+ * \param list1 Second list.
+ * \return Concatenation in the form [list1, list2] or NULL on failure.
+*/
 xor_list* xd_concat(xor_list *list1, xor_list *list2);

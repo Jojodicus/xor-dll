@@ -195,3 +195,40 @@ int* xd_to_array(xor_list *list) {
 
     return array;
 }
+
+xor_list *xd_deep_copy(xor_list *list) {
+    if (!list) {
+        return NULL;
+    }
+
+    // create the new list
+    xor_list *newlist = xd_create_empty_list();
+    if (!newlist) {
+        return NULL;
+    }
+
+    // add every element (while hoping we don't get any errors)
+    LIST_ITERATION(list, xd_add_back(newlist, current->data));
+    return newlist;
+}
+
+xor_list *xd_concat(xor_list *list1, xor_list *list2) {
+    // if one list is NULL, deep copy the other
+    // will also return NULL if both lists don't exist
+    if (!list1) {
+        return xd_deep_copy(list2);
+    }
+    if (!list2) {
+        return xd_deep_copy(list1);
+    }
+
+    // copy one list, then add every element from the other
+    xor_list *newlist = xd_deep_copy(list1);
+    if (!newlist) {
+        return NULL;
+    }
+    // hope we don't get errors
+    LIST_ITERATION(list2, xd_add_back(newlist, current->data));
+
+    return newlist;
+}

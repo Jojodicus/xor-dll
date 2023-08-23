@@ -183,12 +183,73 @@ void test_array() {
 }
 
 void test_copy() {
-    assert(0);
+    xor_list *list = xd_create_empty_list();
+
+    xor_list *copy = xd_deep_copy(list);
+    assert(copy);
+    assert(xd_is_empty(copy));
+    xd_destroy_list(copy);
+
+    // [0, 1, 2, 3]
+    assert(!xd_add_back(list, 1));
+    assert(!xd_add_back(list, 2));
+    assert(!xd_add_back(list, 3));
+    assert(!xd_add_front(list, 0));
+
+    copy = xd_deep_copy(list);
+    assert(copy);
+    int *data = xd_to_array(copy);
+    for (size_t i = 0; i < 4; ++i) {
+        assert(data[i] == i);
+    }
+
+    free(data);
+    xd_destroy_list(copy);
+    xd_destroy_list(list);
+
     test_end();
 }
 
 void test_concat() {
-    assert(0);
+    xor_list *list1 = xd_create_empty_list();
+    xor_list *list2 = xd_create_empty_list();
+
+    assert(!xd_concat(NULL, NULL));
+
+    xor_list *concat = xd_concat(list1, list2);
+    assert(concat);
+    assert(xd_is_empty(concat));
+
+    // [0, 1, 2, 3]
+    assert(!xd_add_back(list1, 1));
+    assert(!xd_add_back(list1, 2));
+    assert(!xd_add_back(list1, 3));
+    assert(!xd_add_front(list1, 0));
+
+    assert(xd_is_empty(concat));
+    xd_destroy_list(concat);
+
+    // [4, 5, 6, 7]
+    assert(!xd_add_back(list2, 5));
+    assert(!xd_add_back(list2, 6));
+    assert(!xd_add_back(list2, 7));
+    assert(!xd_add_front(list2, 4));
+
+    concat = xd_concat(list1, list2);
+    assert(concat);
+
+    xd_destroy_list(list1);
+    xd_destroy_list(list2);
+
+    int *data = xd_to_array(concat);
+    assert(data);
+    for (size_t i = 0; i < 8; ++i) {
+        assert(data[i] == i);
+    }
+
+    free(data);
+    xd_destroy_list(concat);
+
     test_end();
 }
 
